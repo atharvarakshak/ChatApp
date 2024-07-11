@@ -7,7 +7,11 @@ const app = express();
 require('dotenv').config();
 
 
-app.use(cors());
+app.use(cors({
+    origin:'https://chat-app.vercel.app',
+    method:["POST","GET"],
+    credentials:true
+}));
 app.use(express.json());
 
 
