@@ -16,8 +16,9 @@ app.use(cors({
 }));
 app.use(express.json());
 
+MONGO_URL = "mongodb+srv://atharvarakshak23:mM7LtGuS7BwTFQ11@cluster0.dlwp2a9.mongodb.net/chat-app?retryWrites=true&w=majority&appName=Cluster0"
 
-mongoose.connect(process.env.MONGO_URL) .then(()=>{
+mongoose.connect(MONGO_URL) .then(()=>{
     console.log('Connected to MongoDB');
 
 }).catch((err)=>{
@@ -43,6 +44,6 @@ app.post('/register', (req, res) => {
     }).catch(err => res.json(err))
 })
 
-const server = app.listen(process.env.PORT ,()=>{
+const server = app.listen(5000 ,()=>{
     console.log(`Server is running on port: ${process.env.PORT}`);
 })
