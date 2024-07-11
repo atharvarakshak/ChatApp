@@ -10,7 +10,7 @@ require('dotenv').config();
 
 
 app.use(cors({
-    origin:'https://chat-app-api-atharvarakshaks-projects.vercel.app/',
+    origin:'https://chat-app-seven-roan.vercel.app/',
     method:["POST","GET"],
     credentials:true
 }));
