@@ -39,7 +39,6 @@
             } else {
                 RegisterModel.create({name: name, email: email, password: password})
                 .then(result => res.json(result))
-                .then(alert("Registered Successfully"))
                 .catch(err => res.json(err))
             }
         }).catch(err => res.json(err))
