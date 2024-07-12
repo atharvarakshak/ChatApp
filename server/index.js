@@ -16,7 +16,7 @@
     }));
     app.use(express.json());
 
-    // MONGO_URL = "mongodb+srv://atharvarakshak23:mM7LtGuS7BwTFQ11@cluster0.dlwp2a9.mongodb.net/chat-app?retryWrites=true&w=majority&appName=Cluster0"
+
 
     mongoose.connect(process.env.MONGO_URL) .then(()=>{
         console.log('Connected to MongoDB');
@@ -39,6 +39,7 @@
             } else {
                 RegisterModel.create({name: name, email: email, password: password})
                 .then(result => res.json(result))
+                .then(alert("Registered Successfully"))
                 .catch(err => res.json(err))
             }
         }).catch(err => res.json(err))
@@ -46,5 +47,5 @@
 
     const server = app.listen(process.env.PORT ,()=>{
         console.log(`Server is running on port: ${process.env.PORT}`);
-        // console.log(`Server is running on port: 5000`);
+     
     })
