@@ -38,7 +38,7 @@ function Register() {
                 "Account Created Successfully",
                 toastOptions
             );
-            localStorage.setItem('chat-app-user',JSON.stringify(result.data))
+            localStorage.setItem('chat-app-user',JSON.stringify(result.user))
             navigate('/login');
 
         })
