@@ -15,8 +15,8 @@ require('dotenv').config();
 
 
 app.use(cors({
-    // origin:['https://chat-app-seven-roan.vercel.app'],
-    origin:["http://localhost:5173"],
+    origin:['https://chat-app-seven-roan.vercel.app'],
+    // origin:["http://localhost:5173"],
     method:["POST","GET"],
     credentials:true
 }));
