@@ -4,12 +4,16 @@ import { React, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { ToastContainer,toast } from "react-toastify";
 import logo from "../assets/logo.svg";
 import "react-toastify/dist/ReactToastify.css";
 
 function Register() {
+
+    const navigate = useNavigate();
+
+
     const toastOptions = {
         position: "bottom-right",
         autoClose: 8000,
@@ -33,7 +37,10 @@ function Register() {
             toast.success(
                 "Account Created Successfully",
                 toastOptions
-            )
+            );
+            localStorage.setItem('chat-app-user',JSON.stringify(result.data))
+            navigate('/login');
+
         })
         .catch(err => console.log(err))
         }
