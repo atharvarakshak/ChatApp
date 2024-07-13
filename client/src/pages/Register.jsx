@@ -29,7 +29,12 @@ function Register() {
         e.preventDefault();
         if(handleValidation()){
         axios.post('https://chat-app-api-red.vercel.app/register', {name, email, password})
-        .then(result => console.log(result))
+        .then(result => {console.log(result);
+            toast.success(
+                "Account Created Successfully",
+                toastOptions
+            )
+        })
         .catch(err => console.log(err))
         }
       }
