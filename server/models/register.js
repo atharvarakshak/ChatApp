@@ -6,7 +6,7 @@ const RegisterSchema = new mongoose.Schema({
     password: String
 })
 
-const RegisterModel = mongoose.model("chat", RegisterSchema);
+const RegisterModel = mongoose.model("Users", RegisterSchema);
 
 
 module.exports = RegisterModel;

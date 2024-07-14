@@ -3,6 +3,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const RegisterModel = require('./models/register')
 // const bcrypt = require('bcrypt');
+const bodyParser = require('body-parser');
 
 const bcrypt = require('bcryptjs');
 
@@ -11,6 +12,9 @@ const app = express();
 
 require('dotenv').config();
 
+
+app.use(bodyParser.json({ limit: '10mb' }));
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));  
 
 
 
@@ -39,14 +43,16 @@ app.get("/",(req,res)=>{
 app.post('/register', (req, res) => {
     const {name, email, password} = req.body;
     RegisterModel.findOne({email: email})
-    .then(user => {
+    .then(async (user) => {
         if(user) {
-            res.json("Already have an account")
+            res.json("Already have an account");
         } else {
-            const hashPassword = bcrypt.hash(password, 10);
-           const user = RegisterModel.create({name: name, email: email, password: hashPassword})
+            const salt =  await bcrypt.genSalt(10);
+            let secPassword = await bcrypt.hash(password, salt);
+             
+          RegisterModel.create({name: name, email: email, password: secPassword})
             .then(result => {res.json(result);
-                delete user.password;
+         
 
             })
             .catch(err => res.json(err))
