@@ -6,6 +6,8 @@ const RegisterModel = require('./models/register')
 const bodyParser = require('body-parser');
 
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const jwtSecret = "HareKrishnaHareRama";
 
 
 const app = express();
@@ -52,12 +54,48 @@ app.post('/register', (req, res) => {
              
           RegisterModel.create({name: name, email: email, password: secPassword})
             .then(result => {res.json(result);
-         
-
             })
             .catch(err => res.json(err))
         }
     }).catch(err => res.json(err))
+})
+
+
+app.post('/login',(req,res)=>{
+    try{
+    const {email,password} = req.body;
+    let userData = RegisterModel.findOne({email:email});
+    if(!userData){
+        return res.status(400).json({message:"User not found"});
+        
+    }
+    else{
+        const pwdCompare = bcrypt.compare(password,userData.password);
+        if(!pwdCompare){
+            return res.status(400).json({errors:"Try Logging with correct password"});
+
+        }
+        else{
+            const data = {
+                users:{
+                    id:userData.id
+                }
+            }
+
+            const authToken = jwt.sign(data,jwtSecret);
+            res.json({success:true,authToken})
+        }
+
+
+    }
+
+    }
+    catch(err){
+        console.error(err.message);
+        res.json({success:false})
+    }
+    
+
 })
 
 const server = app.listen(process.env.PORT ,()=>{

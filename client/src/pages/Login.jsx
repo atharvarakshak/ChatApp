@@ -4,13 +4,14 @@ import { React, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 import { ToastContainer,toast } from "react-toastify";
 import logo from "../assets/logo.svg";
 import "react-toastify/dist/ReactToastify.css";
 
-function Login() {
 
+function Login() {
+  const navigate = useNavigate();
   const toastOptions = {
     position: "bottom-right",
     autoClose: 8000,
@@ -19,52 +20,57 @@ function Login() {
     theme: "dark",
   };
 
-  const [name, setName] = useState()
+  
   const [email, setEmail] = useState()
   const [password, setPassword] = useState()
-  const [confirmPassword, setconfirmPassword] = useState()
-  
 
 axios.defaults.withCredentials = true;
-  const handleSubmit = (e) => {
+
+const handleSubmit = (e) => {
     e.preventDefault();
-    if(handleValidation()){
-    axios.post('https://chat-app-api-red.vercel.app/register', {name, email, password})
-    .then(result => {console.log(result);
-        toast.success(
-            "Account Created Successfully",
+    
+
+      if(handleValidation()){
+      axios.post('https://chat-app-api-red.vercel.app/login', {email, password})
+      .then(response => {
+        if(!response.success){
+          toast.error(
+            "Invalid Email or Password",
             toastOptions
-        )
-    })
-    .catch(err => console.log(err))
-    }
-  }
+          );
+        }
+        if(response.success){
+          toast.success(
+            "Login Successfully",
+            toastOptions
+          );
+
+          localStorage.setItem('chatUserEmail',email);
+          localStorage.setItem('password',password);
+          console.log(localStorage.getItem('authToken'));
+          navigate('/');
+        }
+      })
+      .catch(err=>console.log(err))
+
+       
+      
+    
+
+     }
+}
 
 const handleValidation = () => {
 
 
-if(confirmPassword!==password){
-    // alert("Password do not match");
-  toast.error(
-    "Password do not match",
-    toastOptions
-  );
-  return false;
-}   
-else if (email === "") {
+ if (email === "") {
     toast.error("Email is required.", toastOptions);
     return false;
   }
-  else if (name.length < 1) {
-    toast.error(
-      "Username should be greater than 1 characters.",
-      toastOptions
-    );
-    return false;
-  }
+
   else if (password.length < 2) {
     toast.error(
-      "Password should be equal or greater than 8 characters.",
+      "Enter valid password",
       toastOptions
     );
     return false;
@@ -84,22 +90,10 @@ return true;
           </div>
 
           <form
-            // onSubmit={handleSubmit}
+            onSubmit={handleSubmit}
             className="flex flex-col justify-center p-6"
           >
-            <div className="mb-3">
-              <label className="text-white" htmlFor="email">
-                <strong>Name</strong>
-              </label>
-              <input
-                type="text"
-                placeholder="Enter Name"
-                autoComplete="off"
-                name="email"
-                className="form-control rounded-0 bg-transparent text-white rounded-xl"
-                onChange={(e) => setName(e.target.value)}
-              />
-            </div>
+            
             <div className="mb-3">
               <label className="text-white" htmlFor="email">
                 <strong>Email</strong>
@@ -127,15 +121,9 @@ return true;
             </div>
             
             <button type="submit" className="btn text-white w-100 rounded-sm bg-violet-600 hover:bg-violet-400">
-              Register
-            </button>
-            <p className="text-white mt-4 mb-2">Already Have an Account ?</p>
-            <Link
-              className="flex justify-center items-center p-2   bg-white text-black rounded-sm hover:bg-gray-500"
-              to="/login"
-            >
               Login
-            </Link>
+            </button>
+            
           </form>
         </div>
       </div>

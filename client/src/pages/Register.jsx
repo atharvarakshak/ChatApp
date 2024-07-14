@@ -39,7 +39,7 @@ function Register() {
                 toastOptions
             );
             localStorage.setItem('chat-app-user',JSON.stringify(result.data))
-            navigate('/login');
+            // navigate('/login');
 
         })
         .catch(err => console.log(err))
