@@ -26,39 +26,32 @@ function Login() {
 
 axios.defaults.withCredentials = true;
 
-const handleSubmit = (e) => {
-    e.preventDefault();
-    
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-      if(handleValidation()){
-      axios.post('https://chat-app-api-red.vercel.app/login', {email, password})
-      .then(response => {
-        if(!response.success){
-          toast.error(
-            "Invalid Email or Password",
-            toastOptions
-          );
-        }
-        if(response.success){
-          toast.success(
-            "Login Successfully",
-            toastOptions
-          );
+  if (handleValidation()) {
+    try {
+      const response = await axios.post(
+        'https://chat-app-api-red.vercel.app/login',
+        { email, password },
+        { withCredentials: true }
+      );
 
-          localStorage.setItem('chatUserEmail',email);
-          localStorage.setItem('password',password);
-          console.log(localStorage.getItem('authToken'));
-          navigate('/');
-        }
-      })
-      .catch(err=>console.log(err))
-
-       
-      
-    
-
-     }
-}
+      if (response.data.success) {
+        toast.success("Login Successfully", toastOptions);
+        localStorage.setItem('chatUserEmail', email);
+        localStorage.setItem('password', password);
+        console.log(localStorage.getItem('authToken'));
+        navigate('/');
+      } else {
+        toast.error("Invalid Email or Password", toastOptions);
+      }
+    } catch (err) {
+      console.error(err);
+      toast.error("Something went wrong. Please try again later.", toastOptions);
+    }
+  }
+};
 
 const handleValidation = () => {
 
